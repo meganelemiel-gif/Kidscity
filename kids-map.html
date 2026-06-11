@@ -30,13 +30,13 @@ html,body{height:100%;overflow:hidden;font-family:"DM Sans",sans-serif;backgroun
 .mk.sel .mk-lbl{display:block;}
 
 /* TOPBAR */
-.topbar{position:fixed;top:0;left:0;right:0;z-index:20;background:rgba(245,240,232,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:env(safe-area-inset-top,0) 16px 0;}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:20;pointer-events:all;background:rgba(245,240,232,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:env(safe-area-inset-top,0) 16px 0;}
 .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px;}
 .logo-title{font-family:"Fraunces",serif;font-size:20px;font-weight:900;color:var(--ink);letter-spacing:-0.5px;}
 .logo-title em{font-style:italic;font-weight:400;color:var(--rose-d);}
 .logo-sub{font-size:9px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-lt);margin-top:1px;}
 .hdr-actions{display:flex;gap:8px;}
-.icon-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:all;position:relative;z-index:21;}
 .tabs-wrap{display:flex;gap:6px;padding:8px 0 10px;overflow-x:auto;}
 .tabs-wrap::-webkit-scrollbar{display:none;}
 .tab{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--white);font:600 11px "DM Sans",sans-serif;color:var(--ink-lt);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;}
@@ -100,7 +100,7 @@ html,body{height:100%;overflow:hidden;font-family:"DM Sans",sans-serif;backgroun
 #routeCanvas{position:absolute;inset:0;pointer-events:none;z-index:4;}
 
 .locate-btn{position:fixed;right:16px;bottom:82px;z-index:24;width:44px;height:44px;border-radius:50%;background:var(--white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(245,240,232,0.97);border-top:1px solid var(--border);backdrop-filter:blur(20px);display:flex;padding:10px 0 env(safe-area-inset-bottom,10px);}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:30;pointer-events:all;background:rgba(245,240,232,0.97);border-top:1px solid var(--border);backdrop-filter:blur(20px);display:flex;padding:10px 0 env(safe-area-inset-bottom,10px);}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;}
 .nav-ico{width:22px;height:22px;}
 .nav-lbl{font:500 9px "DM Sans",sans-serif;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink-lt);}
@@ -277,6 +277,9 @@ mapInner.style.top = offY + 'px';
 var drag = null, startOX, startOY;
 
 mapWrap.addEventListener('touchstart', function(e) {
+  var t = e.target;
+  // Don't pan if touching a button or link
+  if(t.tagName==='BUTTON'||t.tagName==='A'||t.tagName==='INPUT'||t.closest('.topbar')||t.closest('.bottom-nav')||t.closest('.bs-overlay')||t.closest('.itin-panel')||t.closest('.locate-btn')) return;
   if(e.touches.length===1) { drag={x:e.touches[0].clientX,y:e.touches[0].clientY}; startOX=offX; startOY=offY; }
 },{passive:true});
 mapWrap.addEventListener('touchmove', function(e) {
